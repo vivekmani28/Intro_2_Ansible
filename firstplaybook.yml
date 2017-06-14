@@ -1,0 +1,27 @@
+---
+- hosts: all
+  tasks:
+    - name: Installs NodeJs
+      apt: pkg=nodejs state=latest update_cache=true cache_valid_time=3000
+    - name: Installs NMP
+      apt: pkg=npm state=latest update_cache=true cache_valid_time=3000
+    - name: Installs Forever
+      npm: name=forever state=latest global=yes
+    - name: Installing GIT
+      apt: pkg=git state=latest update_cache=true cache_valid_time=3000
+    - name: Cloning App Repo
+      git: repo=https://github.com/CSC-DevOps/App dest=/home/vagrant/GIT clone=yes update=yes
+    - name: Install Dependencies
+      npm: path=/home/vagrant/GIT
+    - name: Removing Files under /tmp
+      shell: rm -rf /tmp/*
+    - name: Starting main.js
+      shell: forever start /home/vagrant/GIT/main.js 5050
+    - name: Checking bash version
+      apt: pkg=bash state=latest update_cache=true cache_valid_time=3000
+    - name: checking openssl version
+      apt: pkg=openssl state=latest update_cache=true cache_valid_time=3000
+    - name: Checking openssh-client version
+      apt: pkg=openssh-client state=latest update_cache=true cache_valid_time=3000
+    - name: Checking openssh-server version
+      apt: pkg=openssh-server state=latest update_cache=true cache_valid_time=3000
